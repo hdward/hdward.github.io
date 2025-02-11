@@ -1,0 +1,459 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>User角色管理 | Hdward&#39;s Blog</title>
+
+<link rel="shortcut icon" href="https://hdward.github.io/favicon.ico?v=1739290763346">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://hdward.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Hdward&#39;s Blog
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1739290763346" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    User角色管理
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2025-02-06 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <pre><code class="language-java">package com.hdward.controller;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hdward.domain.ResponseResult;
+import com.hdward.domain.dto.UserQueryDTO;
+import com.hdward.domain.vo.UserVo;
+import com.hdward.emums.AppHttpCodeEnum;
+import com.hdward.entity.User;
+
+import com.hdward.mapper.UserMapper;
+import com.hdward.service.UserService;
+import com.hdward.utils.BeanCopyUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/user&quot;)
+public class UserController {
+
+
+    @Autowired
+    private UserService userService;
+
+    //添加角色
+    @PostMapping(&quot;/addUser&quot;)
+    public ResponseResult addUser(@RequestBody User user) {
+        if (userService.addUser(user)) {
+            return ResponseResult.okResult();
+        } else {
+            return ResponseResult.errorResult(AppHttpCodeEnum.USERNAME_EXIST);
+        }
+    }
+
+    //删除角色：批量删除
+    @PostMapping(&quot;/deleteUser&quot;)
+    public ResponseResult deleteUser(@RequestBody List&lt;Long&gt; ids) {
+        if (userService.deleteUser(ids)){
+            return ResponseResult.okResult();
+        }else {
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
+        }
+    }
+    //编辑角色
+    @PostMapping(&quot;/updateUser&quot;)
+    public ResponseResult updateUser(@RequestBody User user) {
+        if (userService.updateUser(user)) {
+            return ResponseResult.okResult();
+        } else {
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
+        }
+    }
+    //分页查询:根据用户名查询角色如果不输入用户名则查询所有角色
+    @GetMapping(&quot;/getUserList&quot;)
+    public Page&lt;User&gt; getUserList(@RequestBody UserQueryDTO queryDTO){
+        return userService.getUserList(queryDTO);
+    }
+
+}
+
+</code></pre>
+<pre><code class="language-java">package com.hdward.service;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.hdward.domain.dto.UserQueryDTO;
+import com.hdward.entity.User;
+
+import java.util.List;
+
+public interface UserService extends IService&lt;User&gt; {
+
+    boolean addUser(User user);
+
+    boolean deleteUser(List&lt;Long&gt; ids);
+
+    boolean updateUser(User user);
+
+    Page&lt;User&gt; getUserList(UserQueryDTO queryDTO);
+}
+
+</code></pre>
+<pre><code class="language-java">package com.hdward.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hdward.domain.dto.UserQueryDTO;
+import com.hdward.entity.User;
+import com.hdward.mapper.UserMapper;
+import com.hdward.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+@Service
+public class UserServiceImpl extends ServiceImpl&lt;UserMapper, User&gt; implements UserService {
+
+    @Autowired
+    private  UserMapper userMapper;
+    @Override
+    public boolean addUser(User user) {
+        // 校验用户姓名是否为空
+        if (user.getUserName() == null || user.getUserName().trim().isEmpty()) {
+            return false; // 用户名不能为空
+        }
+
+        // 校验角色(admin)是否为空
+        if (user.getAdmin() == null) {
+            return false; // 角色不能为空
+        }
+
+        // 校验角色值是否有效（True 表示管理员，False 表示普通成员）
+        if (!user.getAdmin().equals(Boolean.TRUE) &amp;&amp; !user.getAdmin().equals(Boolean.FALSE)) {
+            return false; // 角色无效
+        }
+
+        // 检查用户名是否已存在
+        QueryWrapper&lt;User&gt; queryWrapper = new QueryWrapper&lt;&gt;();
+        queryWrapper.eq(&quot;user_name&quot;, user.getUserName());
+        User existingUser = userMapper.selectOne(queryWrapper);
+
+        // 如果用户名已存在，返回false
+        if (existingUser != null) {
+            return false; // 用户已存在
+        }
+
+        // 设置创建时间和修改时间
+        //user.setCreateAt(new Date());
+        //user.setModifiedAt(new Date());
+
+        // 执行插入操作
+        int rowsAffected = userMapper.insert(user);
+
+        // 返回插入结果
+        return rowsAffected &gt; 0;
+    }
+
+    @Override
+    public boolean deleteUser(List&lt;Long&gt; ids) {
+        // 使用CollectionUtils.isEmpty()判断ids是否为空
+        if (CollectionUtils.isEmpty(ids)) {
+            return false; // 如果ids为空或空列表，直接返回false
+        }
+
+        // 使用MyBatis-Plus提供的removeByIds方法批量删除
+        int rowsAffected = userMapper.deleteBatchIds(ids);
+
+        // 返回操作结果，判断受影响的行数是否大于0
+        return rowsAffected &gt; 0;
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        // 校验用户ID是否存在
+        if (user.getId() == null) {
+            return false; // 用户ID不能为空
+        }
+
+        // 校验角色(admin)是否为空
+        if (user.getAdmin() == null) {
+            return false; // 角色不能为空
+        }
+
+        // 校验角色值是否有效（True 表示管理员，False 表示普通成员）
+        if (!user.getAdmin().equals(Boolean.TRUE) &amp;&amp; !user.getAdmin().equals(Boolean.FALSE)) {
+            return false; // 角色无效
+        }
+
+        // 校验用户是否存在
+        QueryWrapper&lt;User&gt; queryWrapper = new QueryWrapper&lt;&gt;();
+        queryWrapper.eq(&quot;id&quot;, user.getId());
+        User existingUser = userMapper.selectOne(queryWrapper);
+
+        // 如果用户不存在，返回false
+        if (existingUser == null) {
+            return false; // 用户不存在
+        }
+
+        // 设置修改时间
+        //user.setModifiedAt(new Date());
+
+        // 执行更新操作
+        int rowsAffected = userMapper.updateById(user);
+
+        // 返回操作结果
+        return rowsAffected &gt; 0;
+    }
+
+    @Override
+    public  Page&lt;User&gt; getUserList(UserQueryDTO queryDTO) {
+        // 创建分页对象
+        Page&lt;User&gt; page = new Page&lt;&gt;(queryDTO.getPageNum(), queryDTO.getPageSize());
+
+        // 创建查询条件
+        QueryWrapper&lt;User&gt; queryWrapper = new QueryWrapper&lt;&gt;();
+
+        // 根据userName查询
+        if (queryDTO.getUserName() != null &amp;&amp; !queryDTO.getUserName().trim().isEmpty()) {
+            queryWrapper.like(&quot;user_name&quot;, queryDTO.getUserName());
+        }
+
+        // 根据admin查询（0: 普通成员, 1: 管理员）
+        if (queryDTO.getAdmin() != null) {
+            queryWrapper.eq(&quot;admin&quot;, queryDTO.getAdmin());
+        }
+
+        // 根据department查询
+        if (queryDTO.getDepartment() != null &amp;&amp; !queryDTO.getDepartment().trim().isEmpty()) {
+            queryWrapper.like(&quot;department&quot;, queryDTO.getDepartment());
+        }
+
+        // 执行分页查询
+        return userMapper.selectPage(page, queryWrapper);
+    }
+}
+
+</code></pre>
+<pre><code class="language-java">package com.hdward.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.hdward.entity.User;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface UserMapper extends BaseMapper&lt;User&gt; {
+}
+
+</code></pre>
+<p>dto</p>
+<pre><code class="language-java">package com.hdward.domain.dto;
+
+import lombok.Data;
+
+@Data
+public class UserQueryDTO {
+
+    private String userName;  // 用户名查询条件
+    private Integer admin;    // 角色类型查询条件，0代表普通成员，1代表管理员
+    private String department; // 部门查询条件
+    private Integer pageNum = 1;   // 当前页，默认第一页
+    private Integer pageSize = 10; // 每页显示条数，默认10条
+
+    // 其他需要的查询条件可以继续扩展
+}
+
+</code></pre>
+<p>user</p>
+<pre><code class="language-java">package com.hdward.entity;
+
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
+
+import java.util.Date;
+
+@Data
+@TableName(&quot;users&quot;)
+public class User {
+    @TableId(value = &quot;id&quot;, type = IdType.AUTO)// 主键
+    private Long id;
+
+    @TableField(&quot;user_name&quot;)
+    private String userName;
+
+    @TableField(&quot;admin&quot;)
+    private Boolean admin;
+
+    @TableField(&quot;name&quot;)
+    private String name;
+
+    @TableField(value = &quot;create_at&quot;, fill = FieldFill.INSERT)
+    private Date createAt;
+
+    @TableField(value = &quot;modified_at&quot;, fill = FieldFill.INSERT_UPDATE)
+    private Date modifiedAt;
+
+    @TableField(&quot;uuid&quot;)
+    private String uuid;
+
+    @TableField(&quot;mobile&quot;)
+    private String mobile;
+
+    @TableField(&quot;email&quot;)
+    private String email;
+
+    @TableField(&quot;department&quot;)
+    private String department;
+
+    @TableField(&quot;name_zh&quot;)
+    private String nameZh;
+
+    @TableField(&quot;name_en&quot;)
+    private String nameEn;
+}
+
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://hdward.github.io/post/java-re-men-mian-shi-ti-200/" class="post-title gt-a-link">
+                    Java热门面试题200
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">努力是会上瘾的，尤其是尝到甜头之后。</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://hdward.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

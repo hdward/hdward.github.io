@@ -1,0 +1,505 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Java热门面试题200 | Hdward&#39;s Blog</title>
+
+<link rel="shortcut icon" href="https://hdward.github.io/favicon.ico?v=1739290763346">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://hdward.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Hdward&#39;s Blog
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1739290763346" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Java热门面试题200
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2025-01-18 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="java面试题">Java面试题</h2>
+<p>1.说说Java中的HashMap原理？</p>
+<ul>
+<li>
+<p>HashMap 是一个基于哈希表的数据结构，通过键的哈希值快速定位存储位置。</p>
+<p>底层由数组+链表（红黑树JDK1.8）实现，通过键的hashCode()方法计算出哈希值，然后由哈希值和数组长度得出一个索引（公式：<code>index = (数组长度 - 1) &amp; hash(key)</code>），发送哈希冲突时会使用链表或者红黑树来存储这些冲突的键值对。当数组长度不够时，会进行扩容至原来的2倍。</p>
+<h5 id="特点-无序-允许空键和空值-非线程安全-需要线程安全可以用-concurrenthashmap">特点： 无序 允许空键和空值 非线程安全 需要线程安全，可以用 <code>ConcurrentHashMap</code></h5>
+<hr>
+<p>2.Java中'ConcurrentHashMap' 1.7和1.8之间有哪些区别？</p>
+<p>​</p>
+<ul>
+<li>Java 1.7 的 <code>ConcurrentHashMap</code> 像是一个大仓库，分成多个小房间（Segment），每个房间有自己的锁。</li>
+<li>Java 1.8 的 <code>ConcurrentHashMap</code> 更像是一个大仓库，每个货架（桶）有自己的锁，锁的粒度更小，效率更高。</li>
+<li>Java 1.8 还引入了红黑树，解决了链表过长时查找效率低的问题。</li>
+</ul>
+<hr>
+<p>3.为什么JDK1.8对HashMap 进行了红黑树的改动？</p>
+<ul>
+<li>
+<p>JDK 1.7 的 <code>HashMap</code> 在链表过长时，性能会变差。</p>
+</li>
+<li>
+<p>JDK 1.8 引入了红黑树，当链表太长时，把它变成一棵树，查找速度更快。</p>
+</li>
+<li>
+<p>红黑树的引入是为了解决极端情况下的性能问题，同时平衡了时间和空间的开销。</p>
+<p>注：</p>
+<ul>
+<li><strong>链表转红黑树</strong>：当链表长度超过 8 时，链表会转换为红黑树。</li>
+<li><strong>红黑树转链表</strong>：当红黑树的节点数减少到 6 时，红黑树会转换回链表。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>4.JDK1.8 对 HashMap 除了红黑树还进行了哪些改动?</p>
+<p>JDK 1.8 对 <code>HashMap</code> 的改进主要集中在以下几个方面：</p>
+<ol>
+<li><strong>性能优化</strong>：引入红黑树、优化哈希算法、改进扩容机制。</li>
+<li><strong>安全性提升</strong>：链表插入方式改为尾插法，避免死循环。</li>
+<li><strong>功能增强</strong>：支持函数式编程，提供更丰富的 API。</li>
+<li><strong>代码优化</strong>：重构代码，提高可读性和可维护性。</li>
+</ol>
+<p>这些改动使得 <code>HashMap</code> 在 JDK 1.8 中性能更高、更安全、更易用。</p>
+<hr>
+<p>5.Java 中有哪些集合类?请简单介绍</p>
+<p>​	Java中集合主要分为两大类：Collection接口和Map接口，前者存储对象的集合类，后者存储的是键值对。</p>
+<p>​	Collection接口下又分为List Set Queue .</p>
+<p>​		List接口（有序可重复）：</p>
+<p>​			常用实现类:ArrayList：基于动态数组实现，查询快，增删慢。</p>
+<p>​								LinkedList：基于双向链表实现，增删快，查询慢。</p>
+<pre><code>  					Vector：线程安全的动态数组，性能较差（已被 ArrayList 取代）。
+</code></pre>
+<p>​		Set:无序不可重复。</p>
+<p>​				HashSet：基于哈希表实现，查询速度快，元素无序。 LinkedHashSet：基于哈希表和链表实现，元素按插入顺序排列。 TreeSet：基于红黑树实现，元素按自然顺序或自定义顺序排序。</p>
+</li>
+</ul>
+<h4 id="1map键不可重复">（1）<strong>Map（键不可重复）</strong></h4>
+<ul>
+<li><strong>特点</strong>：键值对存储，键不允许重复，值可以重复。</li>
+<li><strong>常用实现类</strong>：
+<ul>
+<li><strong>HashMap</strong>：基于哈希表实现，键值对无序，查询速度快。</li>
+<li><strong>LinkedHashMap</strong>：基于哈希表和链表实现，键值对按插入顺序排列。</li>
+<li><strong>TreeMap</strong>：基于红黑树实现，键值对按自然顺序或自定义顺序排序。</li>
+<li><strong>Hashtable</strong>：线程安全的哈希表，性能较差（已被 <code>HashMap</code> 取代）。</li>
+<li><strong>ConcurrentHashMap</strong>：线程安全的哈希表，性能优于 <code>Hashtable</code>。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>5.MySQL索引的最左前缀匹配原则是什么?</p>
+<h3 id="1-什么是复合索引">1. <strong>什么是复合索引？</strong></h3>
+<p>复合索引是指对表中多个列组合起来创建的索引。比如：</p>
+<pre><code>CREATE INDEX idx_name_age ON users(name, age);
+</code></pre>
+<p>这里创建了一个复合索引，包含 <code>name</code> 和 <code>age</code> 两个列。</p>
+<hr>
+<h3 id="2-最左前缀匹配原则是什么">2. <strong>最左前缀匹配原则是什么？</strong></h3>
+<p>最左前缀匹配原则是指：<strong>在使用复合索引时，MySQL 会从索引的最左边开始匹配查询条件</strong>。也就是说，查询条件必须包含复合索引的最左边的列，才能利用索引。</p>
+<hr>
+<h3 id="3-举个例子">3. <strong>举个例子</strong></h3>
+<p>假设有一个复合索引 <code>idx_name_age</code>，包含两列：<code>name</code> 和 <code>age</code>。</p>
+<h4 id="1能使用索引的情况">（1）<strong>能使用索引的情况</strong></h4>
+<ul>
+<li>
+<p><strong>查询条件包含最左列 <code>name</code></strong>：</p>
+<pre><code>SELECT * FROM users WHERE name = 'Alice';
+</code></pre>
+<p>这里使用了 <code>name</code> 列，符合最左前缀匹配原则，索引生效。</p>
+</li>
+<li>
+<p><strong>查询条件包含最左列 <code>name</code> 和第二列 <code>age</code></strong>：</p>
+<pre><code>SELECT * FROM users WHERE name = 'Alice' AND age = 25;
+</code></pre>
+<p>这里同时使用了 <code>name</code> 和 <code>age</code> 列，符合最左前缀匹配原则，索引生效。</p>
+</li>
+</ul>
+<h4 id="2不能使用索引的情况">（2）<strong>不能使用索引的情况</strong></h4>
+<ul>
+<li>
+<p><strong>查询条件不包含最左列 <code>name</code></strong>：</p>
+<pre><code>SELECT * FROM users WHERE age = 25;
+</code></pre>
+<p>这里只使用了 <code>age</code> 列，没有使用最左列 <code>name</code>，不符合最左前缀匹配原则，索引失效。</p>
+</li>
+<li>
+<p><strong>查询条件跳过了最左列 <code>name</code></strong>：</p>
+<pre><code>SELECT * FROM users WHERE age = 25 AND name = 'Alice';
+</code></pre>
+<p>虽然查询条件中包含了 <code>name</code> 和 <code>age</code>，但 <code>name</code> 不是最左列的条件，索引仍然可能失效（取决于 MySQL 的优化器）。</p>
+</li>
+</ul>
+<hr>
+<h3 id="4-特殊情况部分匹配">4. <strong>特殊情况：部分匹配</strong></h3>
+<p>如果查询条件只包含复合索引的一部分列，但仍然从最左列开始匹配，索引仍然可以部分生效。</p>
+<p>例如：</p>
+<pre><code>SELECT * FROM users WHERE name = 'Alice';
+</code></pre>
+<p>这里只使用了 <code>name</code> 列，索引仍然生效。</p>
+<hr>
+<h3 id="5-总结">5. <strong>总结</strong></h3>
+<ul>
+<li><strong>最左前缀匹配原则</strong>：使用复合索引时，查询条件必须从索引的最左列开始匹配。</li>
+<li><strong>能使用索引的情况</strong>：
+<ul>
+<li>查询条件包含最左列。</li>
+<li>查询条件包含最左列及其后的列。</li>
+</ul>
+</li>
+<li><strong>不能使用索引的情况</strong>：
+<ul>
+<li>查询条件不包含最左列。</li>
+<li>查询条件跳过了最左列。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="6-通俗理解">6. <strong>通俗理解</strong></h3>
+<p>可以把复合索引想象成一本字典：</p>
+<ul>
+<li>字典的目录是按照字母顺序排列的（比如 A-Z）。</li>
+<li>如果你只知道第二个字母（比如 B），而没有第一个字母（比如 A），你是无法快速查找的。</li>
+<li>只有从第一个字母开始查找，才能快速定位到目标。</li>
+</ul>
+<hr>
+<p>6.数据库的脏读、不可重复读和幻读分别是什么?</p>
+<ul>
+<li><strong>脏读</strong>：读到别人没写完的草稿。</li>
+<li><strong>不可重复读</strong>：同一件事，两次看到的结果不一样。就像你第一次看一本书的某一页，内容是 A；第二次再看时，内容被改成了 B。</li>
+<li><strong>幻读</strong>：同一范围的数据，两次查询的结果集不一样。就像你第一次数教室里有 10 个人，第二次数时突然多了一个人。</li>
+</ul>
+<hr>
+<p>7.MySQL的存储引擎有哪些?它们之间有什么区别?</p>
+<ul>
+<li>
+<p><strong>需要事务支持</strong>：选择 <strong>InnoDB</strong>。</p>
+</li>
+<li>
+<p><strong>读多写少，不需要事务</strong>：选择 <strong>MyISAM</strong>。</p>
+</li>
+<li>
+<p><strong>临时数据或缓存</strong>：选择 <strong>MEMORY</strong>。</p>
+</li>
+<li>
+<p><strong>日志或归档数据</strong>：选择 <strong>ARCHIVE</strong>。</p>
+</li>
+<li>
+<p><strong>数据导入导出</strong>：选择 <strong>CSV</strong>。</p>
+</li>
+<li>
+<p>以下是这些存储引擎的主要特点和区别：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>特性</strong></th>
+<th style="text-align:left"><strong>InnoDB</strong></th>
+<th style="text-align:left"><strong>MyISAM</strong></th>
+<th style="text-align:left"><strong>MEMORY</strong></th>
+<th style="text-align:left"><strong>ARCHIVE</strong></th>
+<th style="text-align:left"><strong>CSV</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>事务支持</strong></td>
+<td style="text-align:left">支持（ACID 事务）</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>外键支持</strong></td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>锁粒度</strong></td>
+<td style="text-align:left">行级锁</td>
+<td style="text-align:left">表级锁</td>
+<td style="text-align:left">表级锁</td>
+<td style="text-align:left">行级锁</td>
+<td style="text-align:left">表级锁</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>崩溃恢复</strong></td>
+<td style="text-align:left">支持（通过日志恢复）</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">数据丢失</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>存储限制</strong></td>
+<td style="text-align:left">64TB</td>
+<td style="text-align:left">256TB</td>
+<td style="text-align:left">内存限制</td>
+<td style="text-align:left">无明确限制</td>
+<td style="text-align:left">文件大小限制</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>索引类型</strong></td>
+<td style="text-align:left">聚簇索引</td>
+<td style="text-align:left">非聚簇索引</td>
+<td style="text-align:left">哈希索引</td>
+<td style="text-align:left">不支持索引</td>
+<td style="text-align:left">不支持索引</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>适用场景</strong></td>
+<td style="text-align:left">高并发、事务性操作</td>
+<td style="text-align:left">读多写少、非事务性操作</td>
+<td style="text-align:left">临时数据、缓存</td>
+<td style="text-align:left">日志存储、归档数据</td>
+<td style="text-align:left">数据导入导出</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<hr>
+<p>8.MySQL 的覆盖索引是什么?</p>
+<h3 id="1-什么是覆盖索引">1. <strong>什么是覆盖索引？</strong></h3>
+<p>覆盖索引是指：<strong>一个索引包含了查询所需的所有字段</strong>，因此查询可以直接通过索引获取数据，而无需回表（即无需再去读取数据行）。</p>
+<hr>
+<h3 id="2-覆盖索引的原理">2. <strong>覆盖索引的原理</strong></h3>
+<ul>
+<li>通常情况下，MySQL 的查询需要两步：
+<ol>
+<li><strong>通过索引查找数据的位置</strong>（索引扫描）。</li>
+<li><strong>根据位置去数据表中读取具体的行</strong>（回表操作）。</li>
+</ol>
+</li>
+<li>如果使用覆盖索引，查询所需的所有字段都包含在索引中，因此 MySQL 可以直接从索引中获取数据，跳过回表操作。</li>
+</ul>
+<hr>
+<h3 id="3-举个例子-2">3. <strong>举个例子</strong></h3>
+<p>假设有一张表 <code>users</code>，结构如下：</p>
+<pre><code>CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    age INT,
+    city VARCHAR(50)
+);
+</code></pre>
+<h4 id="1普通索引查询">（1）<strong>普通索引查询</strong></h4>
+<ul>
+<li>
+<p>创建一个普通索引：</p>
+<pre><code>CREATE INDEX idx_name ON users(name);
+</code></pre>
+</li>
+<li>
+<p>执行查询：</p>
+<pre><code>SELECT name, age FROM users WHERE name = 'Alice';
+</code></pre>
+<ul>
+<li>这个查询需要两步：
+<ol>
+<li>通过索引 <code>idx_name</code> 找到 <code>name = 'Alice'</code> 的行。</li>
+<li>根据索引中的位置，回表读取 <code>age</code> 字段。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2覆盖索引查询">（2）<strong>覆盖索引查询</strong></h4>
+<ul>
+<li>
+<p>创建一个覆盖索引：</p>
+<pre><code>CREATE INDEX idx_name_age ON users(name, age);
+</code></pre>
+</li>
+<li>
+<p>执行查询：</p>
+<pre><code>SELECT name, age FROM users WHERE name = 'Alice';
+</code></pre>
+<ul>
+<li>这个查询只需要一步：
+<ol>
+<li>通过索引 <code>idx_name_age</code> 直接获取 <code>name</code> 和 <code>age</code> 字段，无需回表。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="4-覆盖索引的好处">4. <strong>覆盖索引的好处</strong></h3>
+<ul>
+<li><strong>减少 I/O 操作</strong>：无需回表，减少了磁盘 I/O 操作，提高了查询性能。</li>
+<li><strong>减少 CPU 开销</strong>：索引通常比数据行小，扫描索引比扫描数据行更快。</li>
+<li><strong>适合查询优化</strong>：对于只查询少量字段的场景，覆盖索引可以显著提升性能。</li>
+</ul>
+<hr>
+<h3 id="5-如何判断是否使用了覆盖索引">5. <strong>如何判断是否使用了覆盖索引？</strong></h3>
+<p>在 MySQL 中，可以通过 <code>EXPLAIN</code> 命令查看查询的执行计划。如果 <code>Extra</code> 列显示 <strong><code>Using index</code></strong>，说明使用了覆盖索引。</p>
+<p>例如：</p>
+<pre><code>EXPLAIN SELECT name, age FROM users WHERE name = 'Alice';
+</code></pre>
+<p>如果输出中 <code>Extra</code> 列显示 <code>Using index</code>，则表示使用了覆盖索引。</p>
+<hr>
+<h3 id="6-覆盖索引的限制">6. <strong>覆盖索引的限制</strong></h3>
+<ul>
+<li><strong>索引大小</strong>：覆盖索引需要包含查询的所有字段，如果字段较多或字段较大，索引会占用更多存储空间。</li>
+<li><strong>写操作开销</strong>：覆盖索引会增加写操作（如 <code>INSERT</code>、<code>UPDATE</code>、<code>DELETE</code>）的开销，因为需要维护更多的索引。</li>
+</ul>
+<hr>
+<h3 id="7-通俗总结">7. <strong>通俗总结</strong></h3>
+<ul>
+<li>覆盖索引就像一本书的目录，如果目录中已经包含了你想查找的内容，你就不需要翻到具体的页面了。</li>
+<li>使用覆盖索引可以避免回表操作，提高查询性能。</li>
+</ul>
+<hr>
+<p>9.MySQL 的索引类型有哪些?</p>
+<ul>
+<li><strong>B-Tree 索引</strong>：万能索引，适合大多数场景。</li>
+<li><strong>哈希索引</strong>：适合快速查找，但不支持范围查询。</li>
+<li><strong>全文索引</strong>：适合搜索文本内容。</li>
+<li><strong>空间索引</strong>：适合地理数据。</li>
+<li><strong>前缀索引</strong>：适合长字段。</li>
+<li><strong>复合索引</strong>：适合多条件查询。</li>
+<li><strong>唯一索引</strong>：适合需要唯一性的字段。</li>
+</ul>
+<hr>
+<ol start="10">
+<li></li>
+</ol>
+<p>​</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://hdward.github.io/post/hello-gridea/" class="post-title gt-a-link">
+                    Hello Gridea
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">努力是会上瘾的，尤其是尝到甜头之后。</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://hdward.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
